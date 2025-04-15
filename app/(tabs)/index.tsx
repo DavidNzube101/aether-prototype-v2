@@ -1,7 +1,12 @@
+
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { useEffect } from "react";
+
 
 export default function HomeScreen() {
+  
+  
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>

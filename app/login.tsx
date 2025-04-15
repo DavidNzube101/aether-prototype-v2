@@ -5,63 +5,74 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
   Image,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
+  Linking,
 } from "react-native"
+import Constants from "expo-constants"
 import { useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
-import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
+import WebView from 'react-native-webview'
 
+import { useAppKit } from "@reown/appkit-wagmi-react-native";
+import "@walletconnect/react-native-compat";
+import { WagmiProvider } from "wagmi";
+import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
+import { mainnet, polygon, arbitrum } from "@wagmi/core/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  createAppKit,
+  defaultWagmiConfig,
+  AppKit,
+} from "@reown/appkit-wagmi-react-native";
+
+
+const queryClient = new QueryClient();
+
+const projectId = "b718ed06e4b6136736ee92a84e7d83fc";
+
+const metadata = {
+  name: "Aether Fit",
+  description: "Aether Fit",
+  url: "https://reown.com/appkit",
+  icons: ["https://avatars.githubusercontent.com/u/179229932"],
+  redirect: {
+    native: "aetherfit://",
+    universal: "aetherfit.com",
+  },
+};
+
+const chains = [mainnet, polygon, arbitrum] as const;
+
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+
+createAppKit({
+  projectId,
+  wagmiConfig,
+  defaultChain: mainnet, // Optional
+  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  features: {
+    email: true,
+    socials: ['x', 'discord', 'apple'],
+    emailShowWallets: true,
+    swaps: true,
+  }
+});
 
 
 export default function Login() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [showPassword, setShowPassword] = useState(false)
+    const [showWebView, setShowWebView] = useState(false)
+    const [webViewUrl, setWebViewUrl] = useState("")
     const router = useRouter()
+    const { open } = useAppKit();
 
-    const handleLogin = () => {
-    // Implement login logic here
-    console.log("Login with:", email, password)
-    // Navigate to main app
-    router.push("/(tabs)")
-    }
-
-    const handleSignUp = () => {
-    router.push("/signup")
-    }
-
-    const SOLFLARE_AUTH_URL = "https://solflare.com/auth?redirect_uri=myapp://auth";
-    const SOLFLARE_CONNECT_URL = "https://solflare.com/ul/v1/connect?redirect_link=myapp://onConnect"
-
-    const initiateSolflareLogin = async () => {
-        // Open authentication URL in the browser
-        const result = await WebBrowser.openAuthSessionAsync(SOLFLARE_AUTH_URL);
-        if (result.type === 'success' && result.url) {
-            // Extract query parameters from the URL (e.g., publicKey)
-            const { queryParams } = Linking.parse(result.url);
-            if (queryParams && queryParams.publicKey) {
-            const userPubkey = new PublicKey(queryParams.publicKey);
-            console.log("User connected with public key:", userPubkey.toString());
-            
-            // Create a connection to the Solana network
-            const connection = new Connection(clusterApiUrl('devnet'));
-            // Continue with your logic to interact with the network...
-            }
-        }
-    }
-
+    
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingView}>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <Image source={require("../assets/logo.jpg")} style={styles.logo} />
@@ -75,45 +86,19 @@ export default function Login() {
           </Text>
 
           <View style={styles.formContainer}>
-            {/* <View style={styles.inputContainer}>
-              <Ionicons name="mail-outline" size={20} color="#CCCCCC" style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#999999"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Ionicons name="lock-closed-outline" size={20} color="#CCCCCC" style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999999"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
-                <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#CCCCCC" />
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity> */}
-
-            <TouchableOpacity style={styles.loginButton} onPress={initiateSolflareLogin}>
-              <Text style={styles.loginButtonText}>Log In with Solflare</Text>
+            <TouchableOpacity 
+              style={styles.loginButton} 
+              onPress={() => open()}
+            >
+              <Text style={styles.loginButtonText}>Log In with Wallet</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginButton2} onPress={handleLogin}>
+            {/* <TouchableOpacity 
+              style={styles.loginButton2} 
+              onPress={() => console.log("Log In with Internet Identity")}
+            >
               <Text style={styles.loginButton2Text}>Log In with Internet Identity</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View style={styles.dividerContainer}>
               <View style={styles.divider} />
@@ -129,17 +114,11 @@ export default function Login() {
                 <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
-
-            {/* <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Don't have an account? </Text>
-              <TouchableOpacity onPress={handleSignUp}>
-                <Text style={styles.signupLink}>Sign Up</Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        <AppKit />
+      </QueryClientProvider>
+    </WagmiProvider>
   )
 }
 
@@ -188,33 +167,6 @@ const styles = StyleSheet.create({
   formContainer: {
     width: "100%",
   },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#333333",
-    marginBottom: 25,
-  },
-  inputIcon: {
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    color: "#FFFFFF",
-    fontSize: 16,
-  },
-  eyeIcon: {
-    padding: 10,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    marginBottom: 30,
-  },
-  forgotPasswordText: {
-    color: "#CCCCCC",
-    fontSize: 14,
-  },
   loginButton: {
     backgroundColor: "#FFFFFF",
     borderRadius: 30,
@@ -242,7 +194,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
-},
+  },
   dividerContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -271,18 +223,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: 10,
-  },
-  signupContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  signupText: {
-    color: "#CCCCCC",
-    fontSize: 14,
-  },
-  signupLink: {
-    color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "bold",
   },
 })

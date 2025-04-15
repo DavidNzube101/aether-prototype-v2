@@ -5,6 +5,12 @@ import { StatusBar } from "expo-status-bar"
 import { useFonts } from "expo-font"
 import { useEffect } from "react"
 import * as SplashScreen from "expo-splash-screen"
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
+import { clusterApiUrl } from '@solana/web3.js'
+
+
+const network = WalletAdapterNetwork.Devnet
+const endpoint = clusterApiUrl(network)
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
