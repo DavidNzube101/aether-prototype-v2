@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from "react-native"
 
-export default function ExploreScreen() {
+export default function ChallengesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Explore Screen</Text>
+      <Text style={styles.text}>Challenges Screen</Text>
     </View>
   )
 }
