@@ -5,12 +5,8 @@ import { StatusBar } from "expo-status-bar"
 import { useFonts } from "expo-font"
 import { useEffect } from "react"
 import * as SplashScreen from "expo-splash-screen"
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
-import { clusterApiUrl } from '@solana/web3.js'
-
-
-const network = WalletAdapterNetwork.Devnet
-const endpoint = clusterApiUrl(network)
+import { AuthProvider } from "../context/auth-context"
+import { OnboardingProvider } from "../context/onboarding-context"
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -32,27 +28,29 @@ export default function RootLayout() {
   }
 
   return (
-    <>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: "#000000" },
-          animation: "fade",
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="onboarding" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="signup" />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
+    <AuthProvider>
+      <OnboardingProvider>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
             headerShown: false,
-            animation: "fade_from_bottom",
+            contentStyle: { backgroundColor: "#000000" },
+            animation: "fade",
           }}
-        />
-      </Stack>
-    </>
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="signup" />
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              headerShown: false,
+              animation: "fade_from_bottom",
+            }}
+          />
+        </Stack>
+      </OnboardingProvider>
+    </AuthProvider>
   )
 }

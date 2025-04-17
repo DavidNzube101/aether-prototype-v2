@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "439269810531",
+    "project_id": "aether-atombase",
+    "storage_bucket": "aether-atombase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439269810531:android:1f4dad00bf7fa6cd503356",
+        "android_client_info": {
+          "package_name": "com.aetherfit.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439269810531-5d5g79dunr0kmbst9l1567jrn9aci0bl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnvqUcKg8Mt_-OAMXXM2Nl5Gu6YwqtDvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439269810531-5d5g79dunr0kmbst9l1567jrn9aci0bl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

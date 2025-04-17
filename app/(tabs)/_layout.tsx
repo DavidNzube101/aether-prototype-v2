@@ -23,7 +23,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
@@ -31,21 +31,28 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="explore/index"
         options={{
           title: "Explore",
           tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="challenges"
+        name="metrics/index"
+        options={{
+          title: "Metrics",
+          tabBarIcon: ({ color, size }) => <Ionicons name="speedometer-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="challenges/index"
         options={{
           title: "Challenges",
           tabBarIcon: ({ color, size }) => <Ionicons name="trophy-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
