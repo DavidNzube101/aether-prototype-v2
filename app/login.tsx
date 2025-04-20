@@ -174,7 +174,7 @@ export default function Login() {
             console.log("Account creation successful")
 
             setIsNewAccount(true)
-            setSuccessMessage("Account created successfully! Welcome to Aether Fit!")
+            setSuccessMessage("Account created successfully!")
             setUser(newUserCredential.user)
 
             // Short delay to show success message before navigation
@@ -288,7 +288,7 @@ export default function Login() {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingView}>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
-            <Image source={require("../assets/logo.jpg")} style={styles.logo} />
+            <Image source={require("../assets/logo.png")} style={styles.logo} />
             <Text style={styles.appName}>Aether Fit</Text>
           </View>
 

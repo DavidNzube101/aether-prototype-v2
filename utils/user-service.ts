@@ -55,7 +55,7 @@ export interface UserProfile {
   onboardingCompleted: boolean
   createdAt: string
   updatedAt: string
-  walletBalance: number | 0
+  walletBalance: number
   walletAddress: string
   notificationSettings: notificationSettingType
   identity: {

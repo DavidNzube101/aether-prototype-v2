@@ -6,36 +6,35 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/logo.jpg",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "scheme": "aetherfit",
-    "deepLinking": true,
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "buildNumber": "1.0.0",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "bundleIdentifier": "com.aetherfit.aetherfit",
-      "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "metamask",
-          "trust",
-          "safe",
-          "rainbow",
-          "uniswap"
-        ]
-      }
+      "bundleIdentifier": "com.aetherfit.aetherfit"
     },
     "android": {
       "intentFilters": [
         {
           "action": "VIEW",
-          "data": [{ "scheme": "aetherfit" }],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "data": [
+            {
+              "scheme": "aetherfit"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ],
       "adaptiveIcon": {
@@ -61,13 +60,22 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],"@react-native-firebase/app",
+      ],
+      "@react-native-firebase/app",
       "@react-native-firebase/auth",
       "expo-apple-authentication",
       "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2bfd3470-2ef6-4122-9101-7ecd9c99aa21"
+      }
     }
   }
 }

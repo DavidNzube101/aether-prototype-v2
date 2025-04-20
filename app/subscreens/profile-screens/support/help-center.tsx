@@ -4,6 +4,7 @@ import { useState } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, FlatList } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
+import { Linking } from 'react-native';
 
 // FAQ data
 const faqs = [
@@ -138,54 +139,96 @@ export default function HelpCenterScreen() {
           )}
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesContainer}
-        >
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[styles.categoryButton, selectedCategory === category.id && styles.categoryButtonActive]}
-              onPress={() => setSelectedCategory(category.id)}
-            >
-              <Text
-                style={[styles.categoryButtonText, selectedCategory === category.id && styles.categoryButtonTextActive]}
+        {/* Category ScrollView with fixed height */}
+        <View style={styles.categoriesWrapper}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoriesContainer}
+          >
+            {categories.map((category) => (
+              <TouchableOpacity
+                key={category.id}
+                style={[styles.categoryButton, selectedCategory === category.id && styles.categoryButtonActive]}
+                onPress={() => setSelectedCategory(category.id)}
               >
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+                <Text
+                  style={[
+                    styles.categoryButtonText,
+                    selectedCategory === category.id && styles.categoryButtonTextActive,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
-        {filteredFaqs.length > 0 ? (
-          <FlatList
-            data={filteredFaqs}
-            renderItem={renderFaqItem}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.faqList}
-          />
-        ) : (
-          <View style={styles.noResultsContainer}>
-            <Ionicons name="search" size={50} color="#444444" />
-            <Text style={styles.noResultsText}>No results found</Text>
-            <Text style={styles.noResultsSubtext}>Try different keywords or browse the categories</Text>
-          </View>
-        )}
+        {/* Main content area */}
+        <View style={styles.faqContainer}>
+          {filteredFaqs.length > 0 ? (
+            <FlatList
+              data={filteredFaqs}
+              renderItem={renderFaqItem}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.faqList}
+            />
+          ) : (
+            <View style={styles.noResultsContainer}>
+              <Ionicons name="search" size={50} color="#444444" />
+              <Text style={styles.noResultsText}>No results found</Text>
+              <Text style={styles.noResultsSubtext}>Try different keywords or browse the categories</Text>
+            </View>
+          )}
+        </View>
       </View>
 
       <View style={styles.contactContainer}>
         <Text style={styles.contactText}>Still need help?</Text>
-        <TouchableOpacity
-          style={styles.contactButton}
-          onPress={() => {
-            // This would normally open a contact form or email client
-            // router.push("/subscreens/profile-screens/contact-support")
-            console.log("Console log: Contact Support")
-          }}
-        >
-          <Text style={styles.contactButtonText}>Contact Support</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          
+          <TouchableOpacity
+            style={{...styles.contactButton, flexDirection: "row", flexWrap: "wrap", alignItems: "center"}}
+            onPress={() => {
+              const SUPPORT_mail = '+23491324725';
+              const openMailApp = () => {
+                const email_url = `mailto:${SUPPORT_mail}`;
+
+                Linking.openURL(SUPPORT_mail)
+                  .catch((error) => console.error('An error occurred while opening the phone app:', error));
+              };
+            }}
+          >
+            <Ionicons 
+              name="phone-portrait-outline" 
+              size={20}
+              color="#FFFFFF" 
+            />
+            <Text style={styles.contactButtonText}>Phone</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{...styles.contactButton, flexDirection: "row", flexWrap: "wrap", alignItems: "center"}}
+            onPress={() => {
+              const SUPPORT_phoneNumber = '+23491324725';
+              const openPhoneApp = () => {
+                const phone_url = `tel:${SUPPORT_phoneNumber}`;
+
+                Linking.openURL(phone_url)
+                  .catch((error) => console.error('An error occurred while opening the phone app:', error));
+              };
+            }}
+          >
+            <Ionicons 
+              name="mail-outline" 
+              size={20}
+              color="#FFFFFF" 
+            />
+            
+            <Text style={styles.contactButtonText}>Mail</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -225,6 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 15,
     marginBottom: 20,
+    height: 50, // Fixed height for search container
   },
   searchIcon: {
     marginRight: 10,
@@ -238,8 +282,14 @@ const styles = StyleSheet.create({
   clearButton: {
     padding: 5,
   },
+  // New wrapper to ensure proper height and spacing
+  categoriesWrapper: {
+    height: 50, // Fixed height for the category section
+    marginBottom: 15,
+  },
   categoriesContainer: {
-    paddingBottom: 15,
+    alignItems: "center", // Center items vertically
+    height: 50, // Match parent height
   },
   categoryButton: {
     paddingHorizontal: 15,
@@ -247,6 +297,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#222222",
     borderRadius: 20,
     marginRight: 10,
+    height: 36, // Fixed height for buttons
+    justifyContent: "center", // Center text vertically
   },
   categoryButtonActive: {
     backgroundColor: "#4CAF50",
@@ -258,6 +310,10 @@ const styles = StyleSheet.create({
   categoryButtonTextActive: {
     color: "#FFFFFF",
     fontWeight: "bold",
+  },
+  // Container for the FAQ list to ensure proper flex behavior
+  faqContainer: {
+    flex: 1,
   },
   faqList: {
     paddingBottom: 20,
@@ -322,6 +378,7 @@ const styles = StyleSheet.create({
   contactButton: {
     backgroundColor: "#4CAF50",
     paddingHorizontal: 20,
+    margin: 10,
     paddingVertical: 10,
     borderRadius: 20,
   },

@@ -76,9 +76,39 @@ export default function MetricsScreen() {
     return `${value} ${metricInfo?.measurement || ""}`
   }
 
+  const metricIcons: Record<string, keyof typeof Ionicons.glyphMap> = {
+    "Steps": "footsteps",
+    "Distance Traveled": "map",
+    "Activity Recognition": "body",
+    "Repetition Counting": "repeat",
+    "Posture Analysis": "phone-portrait",
+    "Speed/Pace": "speedometer",
+    "Cadence": "timer",
+    "Stride Length": "resize",
+    "Calories Burned": "flame",
+    "Sleep Tracking": "moon",
+    "Elevation Gain": "trending-up",
+    "Route Mapping": "locate",
+    "Cycling Metrics": "bicycle",
+    "Balance/Stability": "git-compare",
+    "METs": "analytics",
+    "Fall Detection": "warning",
+    "Heart Rate": "heart",
+    "VO₂ Max Estimation": "fitness",
+    "Stress Levels": "happy",
+    "Swim Tracking": "water",
+    "Breathing Rate": "cloudy-night"
+  }
+
   const renderMetricItem = (metric: FitnessMetric, index: number) => (
     <TouchableOpacity key={index} style={styles.metricItem} onPress={() => handleMetricPress(metric)}>
       <Text style={styles.metricName}>{metric.name}</Text>
+      <Ionicons 
+          name={metricIcons[metric.name]} 
+          size={40} 
+          style={styles.metricIcon} 
+          color="#FFFFFF" 
+        />
       <Text style={styles.metricValue}>{renderMetricValue(metric.name)}</Text>
     </TouchableOpacity>
   )
@@ -90,6 +120,7 @@ export default function MetricsScreen() {
       const row = (
         <View key={i} style={styles.metricRow}>
           {renderMetricItem(metrics[i], i)}
+          
           {i + 1 < metrics.length && renderMetricItem(metrics[i + 1], i + 1)}
         </View>
       )
@@ -288,6 +319,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFFFFF",
     marginBottom: 10,
+  },
+  metricIcon: {
+    alignSelf: "flex-end",
+    margin: 10,
   },
   metricValue: {
     fontSize: 17,
