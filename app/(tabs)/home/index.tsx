@@ -13,6 +13,7 @@ import ChallengeDetailsDrawer from "../../../components/challenge/ChallengeDetai
 import LoadingBar from "../../../components/ui/LoadingBar"
 import { useFocusEffect } from "@react-navigation/native"
 import TriangleLoader from "@/components/ui/TriangleLoader"
+import { FeaturedWorkouts } from "@/components/home/FeaturedWorkouts"
 
 export default function HomeScreen() {
   const { user, logout } = useAuth()
@@ -137,7 +138,7 @@ export default function HomeScreen() {
       <View style={styles.balanceCard}>
         <View>
           <Text style={styles.balanceLabel}>Your AETH Balance</Text>
-          <Text style={styles.balanceAmount}>1,250 AETH</Text>
+          <Text style={styles.balanceAmount}>0 AETH</Text>
         </View>
         <TouchableOpacity style={styles.stakeButton}>
           <Text style={styles.stakeButtonText}>Stake Now</Text>
@@ -179,38 +180,7 @@ export default function HomeScreen() {
         )}
       </View>
 
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Featured Workouts</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All</Text>
-          </TouchableOpacity>
-        </View>
-
-        {[1, 2].map((item) => (
-          <TouchableOpacity key={item} style={styles.workoutCard}>
-            <Image source={getDefaultImage()} style={styles.workoutImage} />
-            <View style={styles.workoutInfo}>
-              <Text style={styles.workoutName}>Full Body HIIT</Text>
-              <Text style={styles.workoutInstructor}>With Sarah Johnson</Text>
-              <View style={styles.workoutStats}>
-                <View style={styles.statItem}>
-                  <Ionicons name="time-outline" size={14} color="#CCCCCC" />
-                  <Text style={styles.statText}>30 min</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Ionicons name="flame-outline" size={14} color="#CCCCCC" />
-                  <Text style={styles.statText}>320 cal</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Ionicons name="star-outline" size={14} color="#CCCCCC" />
-                  <Text style={styles.statText}>4.8</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <FeaturedWorkouts />
 
       <ChallengeDetailsDrawer
         challenge={selectedChallenge}
@@ -343,47 +313,5 @@ const styles = StyleSheet.create({
   },
   challengesContainer: {
     paddingLeft: 20,
-  },
-  workoutCard: {
-    flexDirection: "row",
-    backgroundColor: "#111111",
-    borderRadius: 16,
-    marginHorizontal: 20,
-    marginBottom: 15,
-    overflow: "hidden",
-    height: 100,
-  },
-  workoutImage: {
-    width: 100,
-    height: "100%",
-    resizeMode: "cover",
-  },
-  workoutInfo: {
-    flex: 1,
-    padding: 15,
-    justifyContent: "space-between",
-  },
-  workoutName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-  },
-  workoutInstructor: {
-    fontSize: 12,
-    color: "#CCCCCC",
-  },
-  workoutStats: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  statItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 12,
-  },
-  statText: {
-    fontSize: 12,
-    color: "#CCCCCC",
-    marginLeft: 4,
-  },
+  }
 })

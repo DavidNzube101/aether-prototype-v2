@@ -3,8 +3,10 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import { initializeApp } from "firebase/app"
-import { getAuth, onAuthStateChanged, type User } from "firebase/auth"
-import { saveUserData, clearUserData } from "../utils/auth"
+import { onAuthStateChanged, type User, signOut } from "firebase/auth"
+import { initializeAuth, getReactNativePersistence } from "firebase/auth"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { saveUserData, clearUserData, getAuthToken } from "../utils/auth-utils"
 
 // Initialize Firebase - replace with your config
 const firebaseConfig = {
@@ -19,7 +21,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+})
 
 type AuthContextType = {
   user: User | null
@@ -43,8 +47,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(firebaseUser)
         await saveUserData(firebaseUser)
       } else {
-        setUser(null)
-        await clearUserData()
+        // Check if we have a stored token
+        const token = await getAuthToken()
+        if (!token) {
+          setUser(null)
+          await clearUserData()
+        }
       }
       setLoading(false)
     })
@@ -54,9 +62,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await auth.signOut()
+      console.log("Attempting to sign out...")
+      await signOut(auth)
+      console.log("Firebase sign out successful")
+
       setUser(null)
+
+      console.log("Clearing user data from secure storage...")
       await clearUserData()
+      console.log("Logout process completed")
     } catch (error) {
       console.error("Error logging out:", error)
     }
