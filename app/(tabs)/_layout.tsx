@@ -1,45 +1,87 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import { useEffect } from "react"
+import { useRouter } from "expo-router"
+import { useAuth } from "../../context/auth-context"
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { user, loading, onboardingCompleted, checkOnboardingStatus } = useAuth()
+  const router = useRouter()
 
+  // Check onboarding status when tabs are loaded
+  useEffect(() => {
+    const checkStatus = async () => {
+      if (!loading && user) {
+        const isOnboardingCompleted = await checkOnboardingStatus()
+
+        // Redirect to onboarding if not completed
+        if (!isOnboardingCompleted) {
+          router.replace("/KYU/onboarding")
+        }
+      } else if (!loading && !user) {
+        // Redirect to login if not authenticated
+        router.replace("/login")
+      }
+    }
+
+    checkStatus()
+  }, [user, loading])
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: "#FFFFFF",
+        tabBarInactiveTintColor: "#666666",
+        tabBarStyle: {
+          backgroundColor: "#111111",
+          borderTopColor: "#222222",
+          height: 60,
+          paddingBottom: 10,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        headerStyle: {
+          backgroundColor: "#000000",
+        },
+        headerTintColor: "#FFFFFF",
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
+          headerTitle: "AETHER FIT",
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="explore/index"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Explore",
+          tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="metrics/index"
+        options={{
+          title: "Metrics",
+          tabBarIcon: ({ color, size }) => <Ionicons name="speedometer-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="challenges/index"
+        options={{
+          title: "Challenges",
+          tabBarIcon: ({ color, size }) => <Ionicons name="trophy-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/index"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
         }}
       />
     </Tabs>
-  );
+  )
 }

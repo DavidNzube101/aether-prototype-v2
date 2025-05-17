@@ -1,22 +1,36 @@
 {
   "expo": {
-    "name": "AetherFitNew",
-    "slug": "AetherFitNew",
+    "name": "Aether Fit",
+    "slug": "Aether Fit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "aetherfitnew",
+    "scheme": "aetherfit",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["fetch", "processing", "location"],
+        "NSMotionUsageDescription": "AetherFit needs access to motion data to track your steps and physical activity.",
+        "NSLocationWhenInUseUsageDescription": "AetherFit needs access to your location to track distance traveled during activities.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "AetherFit needs access to your location to track distance traveled during activities, even when the app is in the background.",
+        "NSLocationAlwaysUsageDescription": "AetherFit needs access to your location to track distance traveled during activities, even when the app is in the background."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.ACTIVITY_RECOGNITION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.RECEIVE_BOOT_COMPLETED"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +47,11 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store",
+      "expo-web-browser",
+      "react-native-background-fetch"
     ],
     "experiments": {
       "typedRoutes": true
