@@ -1,5 +1,23 @@
 {
   "name": "aetherfitnew",
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+          "exclude": [
+            "react-native-chart-kit",
+            "react-native-sensors",
+            "@cloudinary/react",
+            "@cloudinary/url-gen",
+            "@ethersproject/bignumber",
+            "@ethersproject/shims",
+            "buffer",
+            "react-native-foreground-service",
+            "react-native-passkeys"
+          ],
+          "listUnknownPackages": false 
+        }
+    }
+  },
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -60,8 +78,6 @@
     "react-native-foreground-service": "^1.0.0",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-get-random-values": "~1.11.0",
-    "react-native-google-fit": "^0.21.0",
-    "react-native-health": "^1.19.0",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-passkeys": "^0.3.3",
     "react-native-reanimated": "~3.17.4",

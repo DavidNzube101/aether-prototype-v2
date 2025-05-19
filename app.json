@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Aether Fit",
-    "slug": "Aether Fit",
+    "slug": "aether-fit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -11,7 +11,11 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "processing", "location"],
+        "UIBackgroundModes": [
+          "fetch",
+          "processing",
+          "location"
+        ],
         "NSMotionUsageDescription": "AetherFit needs access to motion data to track your steps and physical activity.",
         "NSLocationWhenInUseUsageDescription": "AetherFit needs access to your location to track distance traveled during activities.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "AetherFit needs access to your location to track distance traveled during activities, even when the app is in the background.",
@@ -30,7 +34,9 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.RECEIVE_BOOT_COMPLETED"
-      ]
+      ],
+      "package": "com.aetherplay.aetherfit",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
@@ -55,6 +61,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "71fbbf0c-d8b7-4a7c-8c41-4ff79a883e2e"
+      }
     }
   }
 }
